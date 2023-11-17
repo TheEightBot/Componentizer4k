@@ -1,0 +1,1 @@
+﻿[assembly: XmlnsDefinition("http://componentizer.4k/schemas/controls", $"{nameof(Componentizer)}")]
