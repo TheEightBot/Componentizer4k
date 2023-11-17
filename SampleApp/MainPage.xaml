@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:SampleApp"
+             xmlns:ctz="http://componentizer.4k/schemas/controls"
+             x:DataType="local:MainViewModel"
+             x:Class="SampleApp.MainPage">
+    <Grid ColumnDefinitions="*,*" RowDefinitions="*,40">
+
+        <ctz:ComponentNavigator x:Name="ComponentNav" ComponentName="{x:Static local:ComponentNames.MainComponent}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" />
+
+        <Button Text="&lt; Go Backward" Command="{Binding NavigateBackwardCommand}" Grid.Row="1" Grid.Column="0" />
+        <Button Text="Go Forward &gt;" Command="{Binding NavigateForwardCommand}" Grid.Row="1" Grid.Column="1" />
+
+    </Grid>
+
+</ContentPage>
+
