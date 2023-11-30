@@ -2,7 +2,7 @@
 
 namespace Componentizer;
 
-public class ComponentNavigation : IComponentNavigation
+public class ComponentNavigation : IComponentNavigation, IDisposable
 {
     private readonly IServiceProvider _serviceProvider;
 
@@ -19,6 +19,8 @@ public class ComponentNavigation : IComponentNavigation
                 QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
             });
 
+    private bool _disposedValue;
+
     public ComponentNavigation(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
@@ -26,7 +28,7 @@ public class ComponentNavigation : IComponentNavigation
 
     public async Task NavigateToAsync<T>(string componentName, IDictionary<string, object?>? navigationParameters = null, bool animated = true)
     {
-        using var _ = await _navigationLimiter.AcquireAsync();
+        using var navigationLease = await _navigationLimiter.AcquireAsync();
 
         if (!_componentNavigators.TryGetValue(componentName, out var navigator))
         {
@@ -63,7 +65,7 @@ public class ComponentNavigation : IComponentNavigation
 
     public async Task NavigatePopAsync(string componentName, bool animated = true)
     {
-        using var _ = await _navigationLimiter.AcquireAsync();
+        using var navigationLease = await _navigationLimiter.AcquireAsync();
 
         if (!_componentNavigators.TryGetValue(componentName, out var navigator))
         {
@@ -75,7 +77,7 @@ public class ComponentNavigation : IComponentNavigation
 
     public async Task NavigatePopToAsync<T>(string componentName, bool animated = true)
     {
-        using var _ = await _navigationLimiter.AcquireAsync();
+        using var navigationLease = await _navigationLimiter.AcquireAsync();
 
         if (!_componentNavigators.TryGetValue(componentName, out var navigator))
         {
@@ -87,7 +89,7 @@ public class ComponentNavigation : IComponentNavigation
 
     public async Task NavigatePopToRootAsync(string componentName, bool animated = true)
     {
-        using var _ = await _navigationLimiter.AcquireAsync();
+        using var navigationLease = await _navigationLimiter.AcquireAsync();
 
         if (!_componentNavigators.TryGetValue(componentName, out var navigator))
         {
@@ -142,5 +144,25 @@ public class ComponentNavigation : IComponentNavigation
         }
 
         return navigator.ViewModelTypes.LastOrDefault();
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_disposedValue)
+        {
+            if (disposing)
+            {
+                _navigationLimiter.Dispose();
+            }
+
+            _disposedValue = true;
+        }
+    }
+
+    public void Dispose()
+    {
+        // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
     }
 }

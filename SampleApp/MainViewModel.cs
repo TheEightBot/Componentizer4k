@@ -8,19 +8,19 @@ public partial class MainViewModel : ObservableObject
 {
     private readonly IComponentNavigation _componentNavigation;
 
-    private bool goToA = false;
+    private bool _goToA = false;
 
     public MainViewModel(IComponentNavigation componentNavigation)
-	{
+    {
         _componentNavigation = componentNavigation;
     }
 
     [RelayCommand]
     private async Task NavigateForwardAsync()
     {
-        goToA = !goToA;
+        _goToA = !_goToA;
 
-        if(goToA)
+        if (_goToA)
         {
             await _componentNavigation.NavigateToAsync<SampleAViewModel>(ComponentNames.MainComponent);
             return;
@@ -35,4 +35,3 @@ public partial class MainViewModel : ObservableObject
         await _componentNavigation.NavigatePopAsync(ComponentNames.MainComponent);
     }
 }
-

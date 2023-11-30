@@ -4,12 +4,12 @@ namespace SampleApp;
 
 public partial class ComponentB : ContentView, IComponentNavigatorAware
 {
-	public ComponentB(SampleBViewModel viewModel)
-	{
+    public ComponentB(SampleBViewModel viewModel)
+    {
         BindingContext = viewModel;
 
-		InitializeComponent();
-	}
+        InitializeComponent();
+    }
 
     public Task NavigatedFromAsync()
     {

@@ -2,10 +2,17 @@
 
 public class ComponentNavigator : Grid, IComponentNavigator
 {
-    public string ComponentName { get; set; } = string.Empty;
-
     private readonly List<View> _viewStack = new();
     private readonly List<Type> _viewModelTypes = new();
+
+    public static BindableProperty ComponentNameProperty =
+        BindableProperty.Create(nameof(ComponentName), typeof(string), typeof(ComponentNavigator), default(string));
+
+    public string ComponentName
+    {
+        get => (string)GetValue(ComponentNameProperty);
+        set => SetValue(ComponentNameProperty, value);
+    }
 
     public static readonly BindableProperty CurrentContentProperty =
         BindableProperty.Create(
@@ -217,7 +224,7 @@ public class ComponentNavigator : Grid, IComponentNavigator
                     currentContent.FadeTo(0, 400, Easing.CubicIn),
 
                     previousContent.TranslateTo(0, 0, 400, Easing.CubicInOut),
-                    previousContent.FadeTo(1, 400, Easing.CubicInOut)
+                    previousContent.FadeTo(1, 400, Easing.CubicInOut),
                 };
 
             await Task.WhenAll(animations);

@@ -4,15 +4,13 @@ namespace SampleApp;
 
 public partial class MainPage : ContentPage
 {
-    MainViewModel _viewModel;
+    private readonly MainViewModel _viewModel;
 
     public MainPage(MainViewModel viewModel, IComponentNavigation componentNavigation)
-	{
+    {
         BindingContext = _viewModel = viewModel;
-		InitializeComponent();
+        InitializeComponent();
 
         componentNavigation.RegisterNavigationComponent(ComponentNav);
-	}
+    }
 }
-
-
