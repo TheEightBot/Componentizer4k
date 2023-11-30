@@ -3,7 +3,7 @@
 public static class MauiBuilderExtensions
 {
     public static MauiAppBuilder RegisterComponents(this MauiAppBuilder builder, Action<IComponentNavigation> registerAction)
-	{
+    {
         builder.Services.AddSingleton<IComponentNavigation>(
             serviceProvider =>
             {
@@ -17,4 +17,3 @@ public static class MauiBuilderExtensions
         return builder;
     }
 }
-
