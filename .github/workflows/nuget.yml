@@ -35,4 +35,4 @@ jobs:
             - name: Publish the package to GPR
               run: dotnet nuget push Componentizer/bin/Release/*.nupkg
             - name: Publish the package to NuGet
-              run: dotnet nuget push ${{ env.NuGetDirectory }}/*.nupkg --api-key "${{ secrets.EIGHTBOT_NUGET_APIKEY }}" --source https://api.nuget.org/v3/index.json
+              run: dotnet nuget push Componentizer/bin/Release/*.nupkg --api-key "${{ secrets.EIGHTBOT_NUGET_APIKEY }}" --source https://api.nuget.org/v3/index.json
