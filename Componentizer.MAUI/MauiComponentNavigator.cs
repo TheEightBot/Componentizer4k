@@ -1,12 +1,9 @@
 ﻿namespace Componentizer;
 
-public class ComponentNavigator : Grid, IComponentNavigator
+public class MauiComponentNavigator : Grid, IComponentNavigator
 {
-    private readonly List<View> _viewStack = new();
-    private readonly List<Type> _viewModelTypes = new();
-
     public static BindableProperty ComponentNameProperty =
-        BindableProperty.Create(nameof(ComponentName), typeof(string), typeof(ComponentNavigator), default(string));
+        BindableProperty.Create(nameof(ComponentName), typeof(string), typeof(MauiComponentNavigator), default(string));
 
     public string ComponentName
     {
@@ -18,16 +15,8 @@ public class ComponentNavigator : Grid, IComponentNavigator
         BindableProperty.Create(
             nameof(CurrentContent),
             typeof(View),
-            typeof(ComponentNavigator),
-            default,
-            propertyChanged:
-                (bindable, oldValue, newValue) =>
-                {
-                    if (bindable is not ComponentNavigator cn)
-                    {
-                        return;
-                    }
-                });
+            typeof(MauiComponentNavigator),
+            default);
 
     public View CurrentContent
     {
@@ -45,15 +34,12 @@ public class ComponentNavigator : Grid, IComponentNavigator
         BindableProperty.Create(
             nameof(CurrentComponentTitle),
             typeof(string),
-            typeof(ComponentNavigator),
+            typeof(MauiComponentNavigator),
             default);
 
-    public List<View> ViewStack
-    {
-        get => _viewStack;
-    }
+    public List<View> ViewStack { get; } = new();
 
-    public List<Type> ViewModelTypes => _viewModelTypes;
+    public List<Type> ViewModelTypes { get; } = new();
 
     public Task NavigateToAsync<TView>(TView view, Type viewModelType, bool animated = true)
         where TView : class
@@ -63,7 +49,7 @@ public class ComponentNavigator : Grid, IComponentNavigator
             return Task.CompletedTask;
         }
 
-        _viewModelTypes.Add(viewModelType);
+        ViewModelTypes.Add(viewModelType);
 
         return NavigateToAsync(mauiView, animated);
     }
@@ -104,7 +90,7 @@ public class ComponentNavigator : Grid, IComponentNavigator
             this.Remove(currentContent);
         }
 
-        _viewStack.Add(newView);
+        ViewStack.Add(newView);
 
         if (currentContent is not null)
         {
@@ -124,7 +110,7 @@ public class ComponentNavigator : Grid, IComponentNavigator
 
     public Task NavigatePopAsync(bool animated = true)
     {
-        var currentIndex = _viewModelTypes.Count - 1;
+        var currentIndex = ViewModelTypes.Count - 1;
         return PopToIndex(currentIndex - 1, animated);
     }
 
@@ -132,7 +118,7 @@ public class ComponentNavigator : Grid, IComponentNavigator
     {
         var currentContent = CurrentContent;
 
-        var previousContent = _viewStack.ElementAtOrDefault(_viewStack.IndexOf(currentContent) - 1);
+        var previousContent = ViewStack.ElementAtOrDefault(ViewStack.IndexOf(currentContent) - 1);
 
         if (currentContent is IPreventBackNavigation pbn)
         {
@@ -146,12 +132,12 @@ public class ComponentNavigator : Grid, IComponentNavigator
 
     public Task NavigatePopToAsync<TViewModel>(bool animated = true)
     {
-        var currentIndex = _viewModelTypes.Count - 1;
+        var currentIndex = ViewModelTypes.Count - 1;
 
         // one less to prevent matching current page
         for (int i = currentIndex - 1; i >= 0; i--)
         {
-            if (_viewModelTypes[i].Equals(typeof(TViewModel)))
+            if (ViewModelTypes[i].Equals(typeof(TViewModel)))
             {
                 return PopToIndex(i, animated);
             }
@@ -174,7 +160,7 @@ public class ComponentNavigator : Grid, IComponentNavigator
 
         var currentContent = CurrentContent;
 
-        var previousContent = _viewStack.ElementAtOrDefault(indexToPopTo);
+        var previousContent = ViewStack.ElementAtOrDefault(indexToPopTo);
 
         if (previousContent is null || currentContent == previousContent)
         {
@@ -184,13 +170,14 @@ public class ComponentNavigator : Grid, IComponentNavigator
         await NavigatePopToAsync(currentContent, previousContent, animated);
 
         // difference of stack index and index to pop to
-        var totalNumberOfPagesToRemove = (_viewStack.Count - 1) - indexToPopTo;
-        var viewsToRemove = _viewStack.GetRange(indexToPopTo + 1, totalNumberOfPagesToRemove);
+        var totalNumberOfPagesToRemove = (ViewStack.Count - 1) - indexToPopTo;
+        var viewsToRemove = ViewStack.GetRange(indexToPopTo + 1, totalNumberOfPagesToRemove);
         viewsToRemove.Reverse();
         foreach (var view in viewsToRemove)
         {
-            _viewStack.Remove(view);
-            _viewModelTypes.RemoveAt(_viewModelTypes.Count - 1);
+            ViewStack.Remove(view);
+            ViewModelTypes.RemoveAt(ViewModelTypes.Count - 1);
+
             if (currentContent is IComponentNavigatorAware cna)
             {
                 await cna.PoppedAsync();
@@ -235,5 +222,34 @@ public class ComponentNavigator : Grid, IComponentNavigator
         previousContent.TranslationX = 0d;
 
         this.Remove(currentContent);
+    }
+
+    public void ApplyQueryParameters<T>(T view, IDictionary<string, object> query)
+        where T : class
+    {
+        if (view is not BindableObject bView)
+        {
+            return;
+        }
+
+        if (bView is IQueryAttributable vqa)
+        {
+            vqa.ApplyQueryAttributes(query);
+        }
+
+        if (bView is IComponentQueryAttributable vcqa)
+        {
+            vcqa.ApplyQueryAttributes(query);
+        }
+
+        if (bView.BindingContext is IQueryAttributable bvqa)
+        {
+            bvqa.ApplyQueryAttributes(query);
+        }
+
+        if (bView.BindingContext is IComponentQueryAttributable bcvqa)
+        {
+            bcvqa.ApplyQueryAttributes(query);
+        }
     }
 }

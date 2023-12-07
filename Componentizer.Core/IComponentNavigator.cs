@@ -15,5 +15,8 @@ public interface IComponentNavigator
 
     Task NavigatePopToRootAsync(bool animated = true);
 
+    void ApplyQueryParameters<T>(T view, IDictionary<string, object> query)
+        where T : class;
+
     Task<(bool CanNavigate, bool Prompt, string? PromptTitle, string? PromptMessage)> CanBackNavigateAsync();
 }

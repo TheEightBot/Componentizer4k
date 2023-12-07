@@ -67,6 +67,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Componentizer\Componentizer.csproj" />
+	  <ProjectReference Include="..\Componentizer.Core\Componentizer.Core.csproj" />
+	  <ProjectReference Include="..\Componentizer.MAUI\Componentizer.MAUI.csproj" />
 	</ItemGroup>
 </Project>

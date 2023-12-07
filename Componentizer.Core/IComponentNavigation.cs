@@ -8,7 +8,7 @@ public interface IComponentNavigation
 
     void UnregisterNavigationComponent(IComponentNavigator componentNavigator);
 
-    Task NavigateToAsync<T>(string componentName, IDictionary<string, object?>? navigationParameters = null, bool animated = true);
+    Task NavigateToAsync<T>(string componentName, IDictionary<string, object>? query = null, bool animated = true);
 
     Task NavigatePopAsync(string componentName, bool animated = true);
 

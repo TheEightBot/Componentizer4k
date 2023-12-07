@@ -1,6 +1,6 @@
 ﻿namespace Componentizer;
 
-internal interface IPreventBackNavigation
+public interface IPreventBackNavigation
 {
     Task<bool> CanBackNavigateAsync();
 

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 25.0.1706.7
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Componentizer", "Componentizer\Componentizer.csproj", "{F57488FF-2579-4788-A711-7F1861DE200C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Componentizer.MAUI", "Componentizer.MAUI\Componentizer.MAUI.csproj", "{F57488FF-2579-4788-A711-7F1861DE200C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleApp", "SampleApp\SampleApp.csproj", "{ABAB5224-DED7-4A3A-99FE-E2DC674B0D99}"
 EndProject
@@ -25,6 +25,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "[ Actions ]", "[ Actions ]"
 		.github\workflows\nuget.yml = .github\workflows\nuget.yml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Componentizer.Core", "Componentizer.Core\Componentizer.Core.csproj", "{D828126A-7E3D-458A-B675-E82A2CEBB599}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{ABAB5224-DED7-4A3A-99FE-E2DC674B0D99}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ABAB5224-DED7-4A3A-99FE-E2DC674B0D99}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ABAB5224-DED7-4A3A-99FE-E2DC674B0D99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D828126A-7E3D-458A-B675-E82A2CEBB599}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D828126A-7E3D-458A-B675-E82A2CEBB599}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D828126A-7E3D-458A-B675-E82A2CEBB599}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D828126A-7E3D-458A-B675-E82A2CEBB599}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
