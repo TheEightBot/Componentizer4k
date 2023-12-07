@@ -28,20 +28,26 @@ jobs:
               id: version
               uses: release-kit/semver@v1.0.10
 
-            - name: Build
+            - name: Build Componentizer.Core
               run: dotnet build Componentizer.Core/Componentizer.Core.csproj
 
-            - name: Create the package
+            - name: Create the Componentizer.Core package
               run: dotnet pack --configuration Release /p:AssemblyVersion=${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }}.${{ steps.version.outputs.patch }} /p:Version=${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }}.${{ steps.version.outputs.patch }} Componentizer.Core/Componentizer.Core.csproj
 
             - name: Publish the package to GPR
               run: dotnet nuget push Componentizer.Core/bin/Release/*.nupkg
 
-            - name: Build
+            - name: Publish the Componentizer.Core package to NuGet
+              run: dotnet nuget push Componentizer.Core/bin/Release/*.nupkg --api-key "${{ secrets.EIGHTBOT_NUGET_APIKEY }}" --source https://api.nuget.org/v3/index.json
+
+            - name: Build Componentizer.MAUI 
               run: dotnet build Componentizer.MAUI/Componentizer.MAUI.csproj
 
-            - name: Create the package
+            - name: Create the Componentizer.MAUI package
               run: dotnet pack --configuration Release /p:AssemblyVersion=${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }}.${{ steps.version.outputs.patch }} /p:Version=${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }}.${{ steps.version.outputs.patch }} Componentizer.MAUI/Componentizer.MAUI.csproj
 
-            - name: Publish the package to GPR
+            - name: Publish the Componentizer.MAUI package to GPR
               run: dotnet nuget push Componentizer.MAUI/bin/Release/*.nupkg
+
+            - name: Publish the Componentizer.MAUI package to NuGet
+              run: dotnet nuget push Componentizer.MAUI/bin/Release/*.nupkg --api-key "${{ secrets.EIGHTBOT_NUGET_APIKEY }}" --source https://api.nuget.org/v3/index.json
