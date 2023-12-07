@@ -29,10 +29,19 @@ jobs:
               uses: release-kit/semver@v1.0.10
 
             - name: Build
-              run: dotnet build Componentizer/Componentizer.csproj
+              run: dotnet build Componentizer.Core/Componentizer.Core.csproj
+
             - name: Create the package
-              run: dotnet pack --configuration Release  /p:AssemblyVersion=${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }}.${{ steps.version.outputs.patch }} /p:Version=${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }}.${{ steps.version.outputs.patch }} Componentizer/Componentizer.csproj
+              run: dotnet pack --configuration Release /p:AssemblyVersion=${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }}.${{ steps.version.outputs.patch }} /p:Version=${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }}.${{ steps.version.outputs.patch }} Componentizer.Core/Componentizer.Core.csproj
+
             - name: Publish the package to GPR
-              run: dotnet nuget push Componentizer/bin/Release/*.nupkg
-            - name: Publish the package to NuGet
-              run: dotnet nuget push Componentizer/bin/Release/*.nupkg --api-key "${{ secrets.EIGHTBOT_NUGET_APIKEY }}" --source https://api.nuget.org/v3/index.json
+              run: dotnet nuget push Componentizer.Core/bin/Release/*.nupkg
+
+            - name: Build
+              run: dotnet build Componentizer.MAUI/Componentizer.MAUI.csproj
+
+            - name: Create the package
+              run: dotnet pack --configuration Release /p:AssemblyVersion=${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }}.${{ steps.version.outputs.patch }} /p:Version=${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }}.${{ steps.version.outputs.patch }} Componentizer.MAUI/Componentizer.MAUI.csproj
+
+            - name: Publish the package to GPR
+              run: dotnet nuget push Componentizer.MAUI/bin/Release/*.nupkg

@@ -26,7 +26,7 @@ public class ComponentNavigation : IComponentNavigation, IDisposable
         _serviceProvider = serviceProvider;
     }
 
-    public async Task NavigateToAsync<T>(string componentName, IDictionary<string, object?>? navigationParameters = null, bool animated = true)
+    public async Task NavigateToAsync<T>(string componentName, IDictionary<string, object>? query = null, bool animated = true)
     {
         using var navigationLease = await _navigationLimiter.AcquireAsync();
 
@@ -47,17 +47,9 @@ public class ComponentNavigation : IComponentNavigation, IDisposable
             return;
         }
 
-        if (navigationParameters is not null)
+        if (query is not null)
         {
-            if (view is IQueryAttributable vqav)
-            {
-                vqav.ApplyQueryAttributes(navigationParameters);
-            }
-
-            if (view is BindableObject bo && bo.BindingContext is IQueryAttributable boqav)
-            {
-                boqav.ApplyQueryAttributes(navigationParameters);
-            }
+            navigator.ApplyQueryParameters(view, query);
         }
 
         await navigator.NavigateToAsync(view, typeof(T), animated);

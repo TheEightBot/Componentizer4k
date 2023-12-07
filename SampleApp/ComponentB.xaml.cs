@@ -2,13 +2,18 @@
 
 namespace SampleApp;
 
-public partial class ComponentB : ContentView, IComponentNavigatorAware
+public partial class ComponentB : ContentView, IComponentNavigatorAware, IComponentQueryAttributable
 {
     public ComponentB(SampleBViewModel viewModel)
     {
         BindingContext = viewModel;
 
         InitializeComponent();
+    }
+
+    public void ApplyQueryAttributes(IDictionary<string, object> query)
+    {
+        System.Console.WriteLine($"Component B: {query}");
     }
 
     public Task NavigatedFromAsync()

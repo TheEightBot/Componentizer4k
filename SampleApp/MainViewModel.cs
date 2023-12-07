@@ -26,7 +26,12 @@ public partial class MainViewModel : ObservableObject
             return;
         }
 
-        await _componentNavigation.NavigateToAsync<SampleBViewModel>(ComponentNames.MainComponent);
+        await _componentNavigation.NavigateToAsync<SampleBViewModel>(
+            ComponentNames.MainComponent,
+            new Dictionary<string, object>
+            {
+                { "Value", DateTimeOffset.Now.ToUnixTimeMilliseconds() },
+            });
     }
 
     [RelayCommand]
