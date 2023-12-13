@@ -2,7 +2,7 @@
 
 namespace SampleApp;
 
-public partial class ComponentB : ContentView, IComponentNavigatorAware, IComponentQueryAttributable
+public partial class ComponentB : ContentView, IComponentNavigationAware, IComponentQueryAttributable
 {
     public ComponentB(SampleBViewModel viewModel)
     {
@@ -13,7 +13,7 @@ public partial class ComponentB : ContentView, IComponentNavigatorAware, ICompon
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        System.Console.WriteLine($"Component B: {query}");
+        Console.WriteLine($"Component B: {query}");
     }
 
     public Task NavigatedFromAsync()

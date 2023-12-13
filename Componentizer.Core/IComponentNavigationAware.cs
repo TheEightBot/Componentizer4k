@@ -1,6 +1,6 @@
 ﻿namespace Componentizer;
 
-public interface IComponentNavigatorAware
+public interface IComponentNavigationAware
 {
     /// <summary>
     /// Fires when originally 'pushed' onto the component navigator.
