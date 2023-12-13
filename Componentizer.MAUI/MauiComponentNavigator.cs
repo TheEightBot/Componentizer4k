@@ -63,6 +63,16 @@ public class MauiComponentNavigator : Grid, IComponentNavigator
         newView.Opacity = 0;
         this.Add(newView, 0, 0);
 
+        if (newView is IComponentNavigationAware newCna)
+        {
+            await newCna.NavigatedToAsync();
+        }
+
+        if (newView?.BindingContext is IComponentNavigationAware newBccna)
+        {
+            await newBccna.NavigatedToAsync();
+        }
+
         if (animated)
         {
             var animations = new List<Task>();
@@ -88,22 +98,19 @@ public class MauiComponentNavigator : Grid, IComponentNavigator
         if (currentContent is not null)
         {
             this.Remove(currentContent);
-        }
 
-        ViewStack.Add(newView);
-
-        if (currentContent is not null)
-        {
-            if (currentContent is IComponentNavigatorAware cna)
+            if (currentContent is IComponentNavigationAware cna)
             {
                 await cna.NavigatedFromAsync();
             }
+
+            if (currentContent?.BindingContext is IComponentNavigationAware bccna)
+            {
+                await bccna.NavigatedFromAsync();
+            }
         }
 
-        if (newView is IComponentNavigatorAware newCna)
-        {
-            await newCna.NavigatedToAsync();
-        }
+        ViewStack.Add(newView);
 
         CurrentContent = newView;
     }
@@ -170,23 +177,35 @@ public class MauiComponentNavigator : Grid, IComponentNavigator
         await NavigatePopToAsync(currentContent, previousContent, animated);
 
         // difference of stack index and index to pop to
-        var totalNumberOfPagesToRemove = (ViewStack.Count - 1) - indexToPopTo;
+        var totalNumberOfPagesToRemove = ViewStack.Count - 1 - indexToPopTo;
+
         var viewsToRemove = ViewStack.GetRange(indexToPopTo + 1, totalNumberOfPagesToRemove);
         viewsToRemove.Reverse();
+
         foreach (var view in viewsToRemove)
         {
             ViewStack.Remove(view);
             ViewModelTypes.RemoveAt(ViewModelTypes.Count - 1);
 
-            if (currentContent is IComponentNavigatorAware cna)
+            if (currentContent is IComponentNavigationAware cna)
             {
                 await cna.PoppedAsync();
             }
+
+            if (currentContent?.BindingContext is IComponentNavigationAware bccna)
+            {
+                await bccna.PoppedAsync();
+            }
         }
 
-        if (previousContent is IComponentNavigatorAware newCna)
+        if (previousContent is IComponentNavigationAware newCna)
         {
             await newCna.PoppedBackToAsync();
+        }
+
+        if (previousContent?.BindingContext is IComponentNavigationAware newBccna)
+        {
+            await newBccna.PoppedBackToAsync();
         }
 
         CurrentContent = previousContent;

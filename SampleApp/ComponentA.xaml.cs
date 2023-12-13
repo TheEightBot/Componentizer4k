@@ -2,9 +2,9 @@
 
 namespace SampleApp;
 
-public partial class ComponentA : ContentView, IComponentNavigatorAware
+public partial class ComponentA : ContentView, IComponentNavigationAware
 {
-    public ComponentA(SampleBViewModel viewModel)
+    public ComponentA(SampleAViewModel viewModel)
     {
         BindingContext = viewModel;
 
