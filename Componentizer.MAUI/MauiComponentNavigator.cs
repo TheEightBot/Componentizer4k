@@ -2,7 +2,7 @@
 
 public class MauiComponentNavigator : Grid, IComponentNavigator
 {
-    public static BindableProperty ComponentNameProperty =
+    public static readonly BindableProperty ComponentNameProperty =
         BindableProperty.Create(nameof(ComponentName), typeof(string), typeof(MauiComponentNavigator), default(string));
 
     public string ComponentName
@@ -58,7 +58,7 @@ public class MauiComponentNavigator : Grid, IComponentNavigator
     {
         var currentContent = CurrentContent;
 
-        newView.TranslationX = this.Width;
+        newView.TranslationX = Width;
         newView.ZIndex = 0;
         newView.Opacity = 0;
         this.Add(newView, 0, 0);
@@ -68,7 +68,7 @@ public class MauiComponentNavigator : Grid, IComponentNavigator
             await newCna.NavigatedToAsync();
         }
 
-        if (newView?.BindingContext is IComponentNavigationAware newBccna)
+        if (newView.BindingContext is IComponentNavigationAware newBccna)
         {
             await newBccna.NavigatedToAsync();
         }
@@ -81,7 +81,7 @@ public class MauiComponentNavigator : Grid, IComponentNavigator
             {
                 currentContent.ZIndex = 100;
 
-                animations.Add(currentContent.TranslateTo(-this.Width, 0, 400, Easing.CubicIn));
+                animations.Add(currentContent.TranslateTo(-Width, 0, 400, Easing.CubicIn));
                 animations.Add(currentContent.FadeTo(0, 400, Easing.CubicIn));
             }
 
@@ -97,7 +97,7 @@ public class MauiComponentNavigator : Grid, IComponentNavigator
 
         if (currentContent is not null)
         {
-            this.Remove(currentContent);
+            Remove(currentContent);
 
             if (currentContent is IComponentNavigationAware cna)
             {
@@ -217,16 +217,16 @@ public class MauiComponentNavigator : Grid, IComponentNavigator
 
         previousContent.ZIndex = 0;
         previousContent.Opacity = 0;
-        previousContent.TranslationX = -this.Width;
+        previousContent.TranslationX = -Width;
 
-        this.Add(previousContent);
+        Add(previousContent);
 
         if (animated)
         {
             var animations =
                 new List<Task>
                 {
-                    currentContent.TranslateTo(this.Width, 0, 400, Easing.CubicIn),
+                    currentContent.TranslateTo(Width, 0, 400, Easing.CubicIn),
                     currentContent.FadeTo(0, 400, Easing.CubicIn),
 
                     previousContent.TranslateTo(0, 0, 400, Easing.CubicInOut),
@@ -240,7 +240,7 @@ public class MauiComponentNavigator : Grid, IComponentNavigator
         previousContent.Opacity = 1d;
         previousContent.TranslationX = 0d;
 
-        this.Remove(currentContent);
+        Remove(currentContent);
     }
 
     public void ApplyQueryParameters<T>(T view, IDictionary<string, object> query)
@@ -256,19 +256,9 @@ public class MauiComponentNavigator : Grid, IComponentNavigator
             vqa.ApplyQueryAttributes(query);
         }
 
-        if (bView is IComponentQueryAttributable vcqa)
-        {
-            vcqa.ApplyQueryAttributes(query);
-        }
-
         if (bView.BindingContext is IQueryAttributable bvqa)
         {
             bvqa.ApplyQueryAttributes(query);
-        }
-
-        if (bView.BindingContext is IComponentQueryAttributable bcvqa)
-        {
-            bcvqa.ApplyQueryAttributes(query);
         }
     }
 }

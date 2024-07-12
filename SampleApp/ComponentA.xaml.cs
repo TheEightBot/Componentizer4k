@@ -6,28 +6,16 @@ public partial class ComponentA : ContentView, IComponentNavigationAware
 {
     public ComponentA(SampleAViewModel viewModel)
     {
-        BindingContext = viewModel;
+        this.BindingContext = viewModel;
 
-        InitializeComponent();
+        this.InitializeComponent();
     }
 
-    public Task NavigatedFromAsync()
-    {
-        return Task.CompletedTask;
-    }
+    public Task NavigatedFromAsync() => Task.CompletedTask;
 
-    public Task NavigatedToAsync()
-    {
-        return Task.CompletedTask;
-    }
+    public Task NavigatedToAsync() => Task.CompletedTask;
 
-    public Task PoppedAsync()
-    {
-        return Task.CompletedTask;
-    }
+    public Task PoppedAsync() => Task.CompletedTask;
 
-    public Task PoppedBackToAsync()
-    {
-        return Task.CompletedTask;
-    }
+    public Task PoppedBackToAsync() => Task.CompletedTask;
 }

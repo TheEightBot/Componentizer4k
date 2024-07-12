@@ -1,11 +1,12 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
+
 <Shell
     x:Class="SampleApp.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:SampleApp"
-    Shell.FlyoutBehavior="Disabled"
-    Title="SampleApp">
+    Title="SampleApp"
+    Shell.FlyoutBehavior="Disabled">
 
     <ShellContent
         Title="Home"
@@ -13,4 +14,3 @@
         Route="MainPage" />
 
 </Shell>
-

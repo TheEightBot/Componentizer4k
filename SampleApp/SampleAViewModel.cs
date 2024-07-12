@@ -3,14 +3,15 @@ using Componentizer;
 
 namespace SampleApp;
 
-public class SampleAViewModel : ObservableObject, IComponentNavigationAware
+public partial class SampleAViewModel : ObservableObject, IComponentNavigationAware
 {
     private readonly IComponentNavigation _componentNavigation;
 
-    public SampleAViewModel(IComponentNavigation componentNavigation)
-    {
-        _componentNavigation = componentNavigation;
-    }
+    [ObservableProperty]
+    private string _currentTime;
+
+    public SampleAViewModel(IComponentNavigation componentNavigation) =>
+        this._componentNavigation = componentNavigation;
 
     public Task NavigatedFromAsync()
     {
@@ -20,6 +21,7 @@ public class SampleAViewModel : ObservableObject, IComponentNavigationAware
 
     public Task NavigatedToAsync()
     {
+        CurrentTime = $"Navigated to @ {DateTime.Now:F}";
         Console.WriteLine("Navigated To");
         return Task.CompletedTask;
     }

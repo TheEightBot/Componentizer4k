@@ -8,9 +8,14 @@ public partial class MainPage : ContentPage
 
     public MainPage(MainViewModel viewModel, IComponentNavigation componentNavigation)
     {
-        BindingContext = _viewModel = viewModel;
-        InitializeComponent();
+        this.BindingContext = this._viewModel = viewModel;
+        this.InitializeComponent();
 
-        componentNavigation.RegisterNavigationComponent(ComponentNav);
+        componentNavigation.RegisterNavigationComponent(this.ComponentNav);
+    }
+
+    protected override async void OnAppearing()
+    {
+        await _viewModel.NavigateForwardCommand.ExecuteAsync(null);
     }
 }

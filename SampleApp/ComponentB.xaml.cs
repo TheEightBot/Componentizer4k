@@ -2,37 +2,22 @@
 
 namespace SampleApp;
 
-public partial class ComponentB : ContentView, IComponentNavigationAware, IComponentQueryAttributable
+public partial class ComponentB : ContentView, IComponentNavigationAware, IQueryAttributable
 {
     public ComponentB(SampleBViewModel viewModel)
     {
-        BindingContext = viewModel;
+        this.BindingContext = viewModel;
 
-        InitializeComponent();
+        this.InitializeComponent();
     }
 
-    public void ApplyQueryAttributes(IDictionary<string, object> query)
-    {
-        Console.WriteLine($"Component B: {query}");
-    }
+    public Task NavigatedFromAsync() => Task.CompletedTask;
 
-    public Task NavigatedFromAsync()
-    {
-        return Task.CompletedTask;
-    }
+    public Task NavigatedToAsync() => Task.CompletedTask;
 
-    public Task NavigatedToAsync()
-    {
-        return Task.CompletedTask;
-    }
+    public Task PoppedAsync() => Task.CompletedTask;
 
-    public Task PoppedAsync()
-    {
-        return Task.CompletedTask;
-    }
+    public Task PoppedBackToAsync() => Task.CompletedTask;
 
-    public Task PoppedBackToAsync()
-    {
-        return Task.CompletedTask;
-    }
+    public void ApplyQueryAttributes(IDictionary<string, object> query) => Console.WriteLine($"Component B: {query}");
 }

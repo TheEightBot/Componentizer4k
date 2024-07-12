@@ -6,8 +6,10 @@ public class ComponentNavigation : IComponentNavigation, IDisposable
 {
     private readonly IServiceProvider _serviceProvider;
 
+    private readonly object _registeredViewLock = new();
     private readonly Dictionary<Type, Type> _registeredViews = new();
 
+    private readonly object _componentNavigationLock = new();
     private readonly Dictionary<string, IComponentNavigator> _componentNavigators = new();
 
     private readonly RateLimiter _navigationLimiter =
@@ -26,7 +28,7 @@ public class ComponentNavigation : IComponentNavigation, IDisposable
         _serviceProvider = serviceProvider;
     }
 
-    public async Task NavigateToAsync<T>(string componentName, IDictionary<string, object>? query = null, bool animated = true)
+    public async Task PushAsync<T>(string componentName, IDictionary<string, object>? query = null, bool animated = true)
     {
         using var navigationLease = await _navigationLimiter.AcquireAsync();
 
@@ -55,7 +57,7 @@ public class ComponentNavigation : IComponentNavigation, IDisposable
         await navigator.NavigateToAsync(view, typeof(T), animated);
     }
 
-    public async Task NavigatePopAsync(string componentName, bool animated = true)
+    public async Task PopAsync(string componentName, bool animated = true)
     {
         using var navigationLease = await _navigationLimiter.AcquireAsync();
 
@@ -67,7 +69,7 @@ public class ComponentNavigation : IComponentNavigation, IDisposable
         await navigator.NavigatePopAsync(animated);
     }
 
-    public async Task NavigatePopToAsync<T>(string componentName, bool animated = true)
+    public async Task PopToAsync<T>(string componentName, bool animated = true)
     {
         using var navigationLease = await _navigationLimiter.AcquireAsync();
 
@@ -79,7 +81,7 @@ public class ComponentNavigation : IComponentNavigation, IDisposable
         await navigator.NavigatePopToAsync<T>(animated);
     }
 
-    public async Task NavigatePopToRootAsync(string componentName, bool animated = true)
+    public async Task PopToRootAsync(string componentName, bool animated = true)
     {
         using var navigationLease = await _navigationLimiter.AcquireAsync();
 
@@ -93,29 +95,38 @@ public class ComponentNavigation : IComponentNavigation, IDisposable
 
     public void RegisterNavigationComponent(IComponentNavigator componentNavigator)
     {
-        _componentNavigators[componentNavigator.ComponentName] = componentNavigator;
+        lock (_componentNavigationLock)
+        {
+            _componentNavigators[componentNavigator.ComponentName] = componentNavigator;
+        }
     }
 
     public void UnregisterNavigationComponent(IComponentNavigator componentNavigator)
     {
-        if (!_componentNavigators.ContainsKey(componentNavigator.ComponentName))
+        lock (_componentNavigationLock)
         {
-            return;
-        }
+            if (!_componentNavigators.ContainsKey(componentNavigator.ComponentName))
+            {
+                return;
+            }
 
-        _componentNavigators.Remove(componentNavigator.ComponentName);
+            _componentNavigators.Remove(componentNavigator.ComponentName);
+        }
     }
 
     public void RegisterView<TViewModel, TView>()
     {
         var viewModelType = typeof(TViewModel);
 
-        if (_registeredViews.ContainsKey(viewModelType))
+        lock (_registeredViewLock)
         {
-            return;
-        }
+            if (_registeredViews.ContainsKey(viewModelType))
+            {
+                return;
+            }
 
-        _registeredViews.Add(viewModelType, typeof(TView));
+            _registeredViews.Add(viewModelType, typeof(TView));
+        }
     }
 
     public async Task<(bool CanNavigate, bool Prompt, string? PromptTitle, string? PromptMessage)> CanBackNavigateAsync(string componentName)

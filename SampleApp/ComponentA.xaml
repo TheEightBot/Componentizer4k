@@ -1,13 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="SampleApp.ComponentA">
-    <VerticalStackLayout>
-        <Label 
-            Text="Component A"
-            BackgroundColor="Fuchsia"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
-</ContentView>
 
+<ContentView
+    x:Class="SampleApp.ComponentA"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    BackgroundColor="Fuchsia">
+    <Label
+        HorizontalOptions="Center"
+        Text="{Binding CurrentTime}"
+        VerticalOptions="Center" />
+</ContentView>
