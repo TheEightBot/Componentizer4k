@@ -3,17 +3,18 @@ using Componentizer;
 
 namespace SampleApp;
 
-public class SampleBViewModel : ObservableObject, IComponentQueryAttributable
+public partial class SampleBViewModel : ObservableObject, IQueryAttributable
 {
     private readonly IComponentNavigation _componentNavigation;
 
-    public SampleBViewModel(IComponentNavigation componentNavigation)
-    {
-        _componentNavigation = componentNavigation;
-    }
+    [ObservableProperty]
+    private string _queryParameter;
+
+    public SampleBViewModel(IComponentNavigation componentNavigation) =>
+        this._componentNavigation = componentNavigation;
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        System.Console.WriteLine($"SampleBViewModel: {query}");
+        QueryParameter = string.Join(',', query.Select(kvp => $"{kvp.Key} - {kvp.Value}"));
     }
 }

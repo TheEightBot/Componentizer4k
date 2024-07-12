@@ -1,18 +1,41 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:SampleApp"
-             xmlns:ctz="http://componentizer.4k/schemas/controls"
-             x:DataType="local:MainViewModel"
-             x:Class="SampleApp.MainPage">
-    <Grid ColumnDefinitions="*,*" RowDefinitions="*,40" RowSpacing="8" ColumnSpacing="8" Padding="8">
 
-        <ctz:MauiComponentNavigator x:Name="ComponentNav" ComponentName="{x:Static local:ComponentNames.MainComponent}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" />
+<ContentPage
+    x:Class="SampleApp.MainPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:ctz="http://componentizer.4k/schemas/controls"
+    xmlns:local="clr-namespace:SampleApp"
+    x:DataType="local:MainViewModel">
+    <Grid
+        Padding="8"
+        ColumnDefinitions="*,*"
+        ColumnSpacing="8"
+        RowDefinitions="100,*,40"
+        RowSpacing="8">
 
-        <Button Text="&lt; Go Backward" Command="{Binding NavigateBackwardCommand}" Grid.Row="1" Grid.Column="0" />
-        <Button Text="Go Forward &gt;" Command="{Binding NavigateForwardCommand}" Grid.Row="1" Grid.Column="1" />
+        <HorizontalStackLayout>
+            <Label HorizontalTextAlignment="Center" VerticalTextAlignment="Center">This component is persistent...</Label>
+        </HorizontalStackLayout>
+
+        <ctz:MauiComponentNavigator
+            x:Name="ComponentNav"
+            Grid.Row="1"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            ComponentName="{x:Static local:ComponentNames.MainComponent}" />
+
+        <Button
+            Grid.Row="2"
+            Grid.Column="0"
+            Command="{Binding NavigateBackwardCommand}"
+            Text="&lt; Go Backward" />
+        <Button
+            Grid.Row="2"
+            Grid.Column="1"
+            Command="{Binding NavigateForwardCommand}"
+            Text="Go Forward &gt;" />
 
     </Grid>
 
 </ContentPage>
-

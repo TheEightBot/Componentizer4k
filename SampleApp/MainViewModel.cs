@@ -8,25 +8,22 @@ public partial class MainViewModel : ObservableObject
 {
     private readonly IComponentNavigation _componentNavigation;
 
-    private bool _goToA = false;
+    private bool _goToA;
 
-    public MainViewModel(IComponentNavigation componentNavigation)
-    {
-        _componentNavigation = componentNavigation;
-    }
+    public MainViewModel(IComponentNavigation componentNavigation) => this._componentNavigation = componentNavigation;
 
     [RelayCommand]
     private async Task NavigateForwardAsync()
     {
-        _goToA = !_goToA;
+        this._goToA = !this._goToA;
 
-        if (_goToA)
+        if (this._goToA)
         {
-            await _componentNavigation.NavigateToAsync<SampleAViewModel>(ComponentNames.MainComponent);
+            await this._componentNavigation.PushAsync<SampleAViewModel>(ComponentNames.MainComponent);
             return;
         }
 
-        await _componentNavigation.NavigateToAsync<SampleBViewModel>(
+        await this._componentNavigation.PushAsync<SampleBViewModel>(
             ComponentNames.MainComponent,
             new Dictionary<string, object>
             {
@@ -35,8 +32,6 @@ public partial class MainViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task NavigateBackwardAsync()
-    {
-        await _componentNavigation.NavigatePopAsync(ComponentNames.MainComponent);
-    }
+    private async Task NavigateBackwardAsync() =>
+        await this._componentNavigation.PopAsync(ComponentNames.MainComponent);
 }
