@@ -187,12 +187,12 @@ public class MauiComponentNavigator : Grid, IComponentNavigator
             ViewStack.Remove(view);
             ViewModelTypes.RemoveAt(ViewModelTypes.Count - 1);
 
-            if (currentContent is IComponentNavigationAware cna)
+            if (view is IComponentNavigationAware cna)
             {
                 await cna.PoppedAsync();
             }
 
-            if (currentContent?.BindingContext is IComponentNavigationAware bccna)
+            if (view?.BindingContext is IComponentNavigationAware bccna)
             {
                 await bccna.PoppedAsync();
             }
